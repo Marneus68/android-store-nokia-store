@@ -1,6 +1,6 @@
-*This project is a billing provider plugin to [android-store](https://github.com/soomla/android-store). Or at the very least, it tries to be.*
+*This project is a billing provider plugin to [android-store](https://github.com/soomla/android-store). O at the very least, it tries to be.*
 
-## android-store-android-store
+## android-store-nokia-store
 
 This project is an attempt at making a billing service plugin for [android-store](https://github.com/soomla/android-store) that support the Nokia Store for the Nokia X device family. It's not complete yet.  
 
