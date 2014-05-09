@@ -31,7 +31,7 @@ import com.soomla.store.data.StoreInfo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GooglePlayIabService implements IIabService {
+public class NokiaStoreIabService implements IIabService {
 
 
     public void initializeBillingService(final IabCallbacks.IabInitListener iabListener) {
@@ -270,7 +270,7 @@ public class GooglePlayIabService implements IIabService {
     }
 
     /* Private Members */
-    private static final String TAG = "SOOMLA GooglePlayIabService";
+    private static final String TAG = "SOOMLA NokiaStoreIabService";
     private IabHelper mHelper;
     private boolean keepIabServiceOpen = false;
 }

@@ -15,6 +15,14 @@
 
 package com.soomla.store.billing.nokia;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.json.JSONException;
+
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -41,13 +49,6 @@ import com.soomla.store.billing.IabPurchase;
 import com.soomla.store.billing.IabResult;
 import com.soomla.store.billing.IabSkuDetails;
 import com.soomla.store.data.ObscuredSharedPreferences;
-
-import org.json.JSONException;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 
 /**
@@ -104,7 +105,7 @@ public class IabHelper {
 
     // Connection to the service
     //IInAppBillingService mService;
-    INokiaIapService mService;
+    INokiaIAPService mService;
     ServiceConnection mServiceConn;
 
     // The request code used to launch purchase flow
@@ -164,7 +165,8 @@ public class IabHelper {
      *
      * @param listener The listener to notify when the setup process is complete.
      */
-    public void startSetup(final OnIabSetupFinishedListener listener) {
+    @SuppressLint("NewApi")
+	public void startSetup(final OnIabSetupFinishedListener listener) {
         // If already set up, can't do it again.
         if (mSetupDone) throw new IllegalStateException("IAB helper is already set up.");
 
@@ -325,7 +327,8 @@ public class IabHelper {
      *     when the purchase completes. This extra data will be permanently bound to that purchase
      *     and will always be returned when the purchase is queried.
      */
-    public void launchPurchaseFlow(Activity act, String sku, String itemType, int requestCode,
+    @SuppressLint("NewApi")
+	public void launchPurchaseFlow(Activity act, String sku, String itemType, int requestCode,
                         OnIabPurchaseFinishedListener listener, String extraData) {
         checkSetupDone("launchPurchaseFlow");
         flagStartAsync("launchPurchaseFlow");
@@ -645,7 +648,8 @@ public class IabHelper {
             }
 
             StoreUtils.LogDebug(TAG, "Consuming sku: " + sku + ", token: " + token);
-            int response = mService.consumePurchase(3, SoomlaApp.getAppContext().getPackageName(), token);
+            //int response = mService.consumePurchase(3, SoomlaApp.getAppContext().getPackageName(), token);
+            int response = mService.consumePurchase(3, SoomlaApp.getAppContext().getPackageName(), sku, token);
             if (response == IabResult.BILLING_RESPONSE_RESULT_OK) {
                StoreUtils.LogDebug(TAG, "Successfully consumed sku: " + sku);
             }
@@ -774,11 +778,21 @@ public class IabHelper {
         StoreUtils.LogDebug(TAG, "Package name: " + SoomlaApp.getAppContext().getPackageName());
         boolean verificationFailed = false;
         String continueToken = null;
-
+        
+        ///////////// STUFF ADDED FOR THE NOKIA STORE SUPPORT
+        ArrayList<String> products = new ArrayList<String>();
+        products.add(itemType);
+        
+        Bundle queryBundle = new Bundle();
+        queryBundle.putStringArrayList("ITEM_ID_LIST", products);
+        
+        ///////////// STUFF ADDED FOR THE NOKIA STORE SUPPORT
+      
+        
         do {
             StoreUtils.LogDebug(TAG, "Calling getPurchases with continuation token: " + continueToken);
-            Bundle ownedItems = mService.getPurchases(3, SoomlaApp.getAppContext().getPackageName(),
-                    itemType, continueToken);
+            //Bundle ownedItems = mService.getPurchases(3, SoomlaApp.getAppContext().getPackageName(), itemType, continueToken);
+            Bundle ownedItems = mService.getPurchases(3, SoomlaApp.getAppContext().getPackageName(), ITEM_TYPE_INAPP, queryBundle, continueToken);
 
             int response = getResponseCodeFromBundle(ownedItems);
             StoreUtils.LogDebug(TAG, "Owned items response: " + String.valueOf(response));
@@ -876,8 +890,8 @@ public class IabHelper {
     private int querySkuDetailsChunk(String itemType, IabInventory inv, ArrayList<String> chunkSkuList) throws RemoteException, JSONException {
         Bundle querySkus = new Bundle();
         querySkus.putStringArrayList(GET_SKU_DETAILS_ITEM_LIST, chunkSkuList);
-        Bundle skuDetails = mService.getSkuDetails(3, SoomlaApp.getAppContext().getPackageName(),
-                itemType, querySkus);
+        //Bundle skuDetails = mService.getSkuDetails(3, SoomlaApp.getAppContext().getPackageName(), itemType, querySkus);
+        Bundle skuDetails = mService.getProductDetails(3, SoomlaApp.getAppContext().getPackageName(), itemType, querySkus);
 
         if (!skuDetails.containsKey(RESPONSE_GET_SKU_DETAILS_LIST)) {
         	int response = getResponseCodeFromBundle(skuDetails);
