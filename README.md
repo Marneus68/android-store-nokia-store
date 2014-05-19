@@ -1,4 +1,4 @@
-*This project is a billing provider plugin to [android-store](https://github.com/soomla/android-store). O at the very least, it tries to be.*
+*This project is a billing provider plugin to [android-store](https://github.com/soomla/android-store). Or at the very least, it tries to be that.*
 
 ## android-store-nokia-store
 
