@@ -10,7 +10,7 @@ In order to work with this plugin just see android-store's [Getting Started](htt
 
 This work is heavily based on the [android-store-google-play](https://github.com/soomla/android-store-google-play) project which is part of the SOOMLA project. As such, I'm sharing it with the very same license.  
 
-MIT License. Copyright (c) 2012 SOOMLA. http://project.soom.la
+MIT License.
 + http://www.opensource.org/licenses/MIT
 
 
