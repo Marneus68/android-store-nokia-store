@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_androidstorenokiastore" default="compile.module.androidstorenokiastore">
+  <dirname property="module.androidstorenokiastore.basedir" file="${ant.file.module_androidstorenokiastore}"/>
+
+    <property name="aidl" value="${jdk.home.android.platform.tools}aidl" />
+    <property name="framework-aidl" value="${jdk.home.android.platform}framework.aidl" />
+
+  <property name="module.jdk.home.androidstorenokiastore" value="${jdk.home.android}"/>
+  <property name="module.jdk.bin.androidstorenokiastore" value="${jdk.bin.android}"/>
+  <property name="module.jdk.classpath.androidstorenokiastore" value="jdk.classpath.android"/>
+  
+  <property name="compiler.args.androidstorenokiastore" value="-encoding UTF-8 -source 1.6 ${compiler.args}"/>
+  
+  <property name="androidstorenokiastore.output.dir" value="${module.androidstorenokiastore.basedir}/out/production/AndroidStoreGooglePlay"/>
+  
+  <path id="androidstorenokiastore.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="androidstorenokiastore.module.production.classpath">
+    <path refid="${module.jdk.classpath.androidstorenokiastore}"/>
+    <pathelement location="${basedir}/libs/AndroidStore.jar"/>
+  </path>
+  
+  <path id="androidstorenokiastore.runtime.production.module.classpath">
+    <pathelement location="${androidstorenokiastore.output.dir}"/>
+    <pathelement location="${basedir}/libs/AndroidStore.jar"/>
+  </path>
+  
+  <path id="androidstorenokiastore.module.classpath">
+    <path refid="${module.jdk.classpath.androidstorenokiastore}"/>
+    <pathelement location="${androidstorenokiastore.output.dir}"/>
+    <pathelement location="${basedir}/libs/AndroidStore.jar"/>
+  </path>
+  
+  <path id="androidstorenokiastore.runtime.module.classpath">
+    <pathelement location="${androidstorenokiastore.output.dir}"/>
+    <pathelement location="${basedir}/libs/AndroidStore.jar"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.androidstorenokiastore">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.androidstorenokiastore">
+    <patternset refid="compiler.excluded"/>
+    <patternset refid="excluded.from.module.androidstorenokiastore"/>
+  </patternset>
+  
+  <path id="androidstorenokiastore.module.sourcepath">
+    <dirset dir="${module.androidstorenokiastore.basedir}">
+      <include name="src"/>
+        <include name=".idea/gen/com/android"/>
+    </dirset>
+  </path>
+  
+  <target name="config">
+
+    <property name="config-target-path" value="${basedir}/src/com/soomla/store/"/>
+
+    <!-- Copy the configuration file, replacing tokens in the file. -->
+    <copy file="config/StoreConfig.java" todir="${config-target-path}"
+          overwrite="true" encoding="utf-8">
+     <filterset>
+      <filter token="CONFIG.LOGGING" value="${logging}"/>
+     </filterset>
+    </copy>
+  
+    <!-- Now set it to read-only, as we don't want people accidentally
+         editing the wrong one. NOTE: This step is unnecessary, but I do
+         it so the developers remember that this is not the original file. -->
+    <!-- <chmod file="${config-target-path}/StoreConfig.java" perm="-w"/> -->
+    <!-- <attrib file="${config-target-path}/StoreConfig.java" readonly="true"/> -->
+
+   </target>
+
+    <target name="aidl" >
+        <echo>Compiling .aidl into java files...</echo>
+        <apply executable="${aidl}" failonerror="true">
+            <!--  -->
+            <arg value="-p${framework-aidl}" />
+            <!-- aidl -->
+            <arg value="-Isrc" />
+            <!--  -->
+            <arg value="-o.idea/gen" />
+            <!--  -->
+            <fileset dir="src">
+                <include name="**/*.aidl" />
+            </fileset>
+        </apply>
+    </target>
+
+    <target name="compile.module.androidstorenokiastore" depends="compile.module.androidstorenokiastore.production" description="Compile module AndroidStoreGooglePlay"/>
+  
+  <target name="compile.module.androidstorenokiastore.production" description="Compile module AndroidStoreGooglePlay; production classes" depends="aidl">
+    <mkdir dir="${androidstorenokiastore.output.dir}"/>
+    <javac destdir="${androidstorenokiastore.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.androidstorenokiastore}/javac">
+      <compilerarg line="${compiler.args.androidstorenokiastore}"/>
+      <bootclasspath refid="androidstorenokiastore.module.bootclasspath"/>
+      <classpath refid="androidstorenokiastore.module.production.classpath"/>
+      <src refid="androidstorenokiastore.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.androidstorenokiastore"/>
+    </javac>
+    
+    <copy todir="${androidstorenokiastore.output.dir}">
+      <fileset dir="${module.androidstorenokiastore.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+        <patternset refid="excluded.from.compilation.androidstorenokiastore"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.androidstorenokiastore" description="cleanup module">
+    <delete dir="${androidstorenokiastore.output.dir}"/>
+  </target>
+</project>

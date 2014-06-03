@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+//package com.soomla.store.billing.google;
 package com.soomla.store.billing.nokia;
 
 /**
@@ -61,7 +62,7 @@ public class Consts {
 
     /** This is the action we use to bind to the MarketBillingService. */
     public static final String MARKET_BILLING_SERVICE_ACTION =
-        "com.android.vending.billing.MarketBillingService.BIND";
+        "com.nokia.payment.iapenabler.InAppBillingService.BIND";
 
     // Intent actions that we send from the BillingReceiver to the
     // BillingService.  Defined by this application.

@@ -13,6 +13,7 @@
  * limitations under the License.
  */
 
+//package com.soomla.store.billing.google;
 package com.soomla.store.billing.nokia;
 
 import android.text.TextUtils;
@@ -59,7 +60,7 @@ public class Security {
 
         if (TextUtils.isEmpty(signedData) || TextUtils.isEmpty(base64PublicKey) || TextUtils.isEmpty(signature)) {
         	Log.e(TAG, "Purchase verification failed: missing data.");
-            if (StoreConfig.AllowAndroidTestPurchases) {
+            if (NokiaStoreIabService.AllowAndroidTestPurchases) {
                 Log.e(TAG, "Allowing empty signatures ...");
                 return true;
             }

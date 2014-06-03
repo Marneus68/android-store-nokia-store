@@ -1,0 +1,3 @@
+#ant -buildfile android-store-nokia-store.xml -Dlogging="true" -Dsoomla.filename="Soomla_debug" all
+#ant -buildfile android-store-nokia-store.xml -Dlogging="false" -Dsoomla.filename="Soomla_release" all
+ant -buildfile android-store-nokia-store.xml -Dsoomla.filename="AndroidStoreGooglePlay" all
