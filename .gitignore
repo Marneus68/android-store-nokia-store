@@ -1,3 +1,6 @@
+# Specific project files ignored because of local machine configuration differences
+android-store-nokia-store.properties
+
 # built application files
 *.apk
 *.ap_
