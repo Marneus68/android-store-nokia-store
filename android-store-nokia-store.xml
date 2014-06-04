@@ -83,18 +83,18 @@
   
   <target name="init.artifacts">
     <property name="artifacts.temp.dir" value="${basedir}/__artifacts_temp"/>
-    <property name="artifact.output.androidstorenokiastore:jar" value="${basedir}/out/artifacts/AndroidStoreGooglePlay_jar"/>
+    <property name="artifact.output.androidstorenokiastore:jar" value="${basedir}/out/artifacts/AndroidStoreNokiaStore_jar"/>
     <mkdir dir="${artifacts.temp.dir}"/>
-    <property name="temp.jar.path.AndroidStoreGooglePlay.jar" value="${artifacts.temp.dir}/${soomla.filename}.jar"/>
+    <property name="temp.jar.path.AndroidStoreNokiaStore.jar" value="${artifacts.temp.dir}/${soomla.filename}.jar"/>
   </target>
   
-  <target name="artifact.androidstorenokiastore:jar" depends="init.artifacts, compile.module.androidstorenokiastore" description="Build &#39;AndroidStoreGooglePlay:jar&#39; artifact">
-    <property name="artifact.temp.output.androidstorenokiastore:jar" value="${artifacts.temp.dir}/AndroidStoreGooglePlay_jar"/>
+  <target name="artifact.androidstorenokiastore:jar" depends="init.artifacts, compile.module.androidstorenokiastore" description="Build &#39;AndroidStoreNokiaStore:jar&#39; artifact">
+    <property name="artifact.temp.output.androidstorenokiastore:jar" value="${artifacts.temp.dir}/AndroidStoreNokiaStore_jar"/>
     <mkdir dir="${artifact.temp.output.androidstorenokiastore:jar}"/>
-    <jar destfile="${temp.jar.path.AndroidStoreGooglePlay.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
+    <jar destfile="${temp.jar.path.AndroidStoreNokiaStore.jar}" duplicate="preserve" filesetmanifest="mergewithoutmain">
       <zipfileset dir="${androidstorenokiastore.output.dir}"/>
     </jar>
-    <copy file="${temp.jar.path.AndroidStoreGooglePlay.jar}" tofile="${basedir}/${androidstorenokiastore.target.dir}/${soomla.filename}.jar"/>
+    <copy file="${temp.jar.path.AndroidStoreNokiaStore.jar}" tofile="${basedir}/${androidstorenokiastore.target.dir}/${soomla.filename}.jar"/>
   </target>
   
   <target name="build.all.artifacts" depends="artifact.androidstorenokiastore:jar" description="Build all artifacts">
