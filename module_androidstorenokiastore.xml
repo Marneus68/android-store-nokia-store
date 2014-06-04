@@ -51,7 +51,8 @@
   <path id="androidstorenokiastore.module.sourcepath">
     <dirset dir="${module.androidstorenokiastore.basedir}">
       <include name="src"/>
-        <include name=".idea/gen/com/android"/>
+        <!-- <include name=".idea/gen/com/android"/> -->
+        <include name=".idea/gen/com/nokia"/>
     </dirset>
   </path>
   

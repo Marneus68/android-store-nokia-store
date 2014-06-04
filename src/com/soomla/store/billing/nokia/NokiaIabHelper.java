@@ -53,7 +53,7 @@ import java.util.Set;
 
 
 /**
- * This is an implementation of SOOMLA's IabHelper to create a plugin of Nokia Store to SOOMLA.
+ * This is an implementation of SOOMLA's IabHelper to create a plugin for the Nokia Store.
  *
  * More docs in parent.
  */
