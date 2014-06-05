@@ -65,19 +65,19 @@ public class NokiaIabHelper extends IabHelper {
     public static final int SKU_QUERY_MAX_CHUNK_SIZE = 19;
 
     // Keys for the responses from InAppBillingService
-    public static final String RESPONSE_CODE = "RESPONSE_CODE";
-    public static final String RESPONSE_GET_SKU_DETAILS_LIST = "DETAILS_LIST";
-    public static final String RESPONSE_BUY_INTENT = "BUY_INTENT";
-    public static final String RESPONSE_INAPP_PURCHASE_DATA = "INAPP_PURCHASE_DATA";
-    public static final String RESPONSE_INAPP_SIGNATURE = "INAPP_DATA_SIGNATURE";
-    public static final String RESPONSE_INAPP_ITEM_LIST = "INAPP_PURCHASE_ITEM_LIST";
-    public static final String RESPONSE_INAPP_PURCHASE_DATA_LIST = "INAPP_PURCHASE_DATA_LIST";
-    public static final String RESPONSE_INAPP_SIGNATURE_LIST = "INAPP_DATA_SIGNATURE_LIST";
-    public static final String INAPP_CONTINUATION_TOKEN = "INAPP_CONTINUATION_TOKEN";
+    public static final String RESPONSE_CODE                        = "RESPONSE_CODE";
+    public static final String RESPONSE_GET_SKU_DETAILS_LIST        = "DETAILS_LIST";
+    public static final String RESPONSE_BUY_INTENT                  = "BUY_INTENT";
+    public static final String RESPONSE_INAPP_PURCHASE_DATA         = "INAPP_PURCHASE_DATA";
+    public static final String RESPONSE_INAPP_SIGNATURE             = "INAPP_DATA_SIGNATURE";
+    public static final String RESPONSE_INAPP_ITEM_LIST             = "INAPP_PURCHASE_ITEM_LIST";
+    public static final String RESPONSE_INAPP_PURCHASE_DATA_LIST    = "INAPP_PURCHASE_DATA_LIST";
+    public static final String RESPONSE_INAPP_SIGNATURE_LIST        = "INAPP_DATA_SIGNATURE_LIST";
+    public static final String INAPP_CONTINUATION_TOKEN             = "INAPP_CONTINUATION_TOKEN";
 
     // some fields on the getSkuDetails response bundle
-    public static final String GET_SKU_DETAILS_ITEM_LIST = "ITEM_ID_LIST";
-    public static final String GET_SKU_DETAILS_ITEM_TYPE_LIST = "ITEM_TYPE_LIST";
+    public static final String GET_SKU_DETAILS_ITEM_LIST            = "ITEM_ID_LIST";
+    public static final String GET_SKU_DETAILS_ITEM_TYPE_LIST       = "ITEM_TYPE_LIST";
 
     /**
      * Creates an instance. After creation, it will not yet be ready to use. You must perform
@@ -181,26 +181,26 @@ public class NokiaIabHelper extends IabHelper {
 
         int responseCode = getResponseCodeFromIntent(data);
         String purchaseData = data.getStringExtra(RESPONSE_INAPP_PURCHASE_DATA);
-        String dataSignature = data.getStringExtra(RESPONSE_INAPP_SIGNATURE);
+        //String dataSignature = data.getStringExtra(RESPONSE_INAPP_SIGNATURE);
 
         if (resultCode == Activity.RESULT_OK && responseCode == IabResult.BILLING_RESPONSE_RESULT_OK) {
             StoreUtils.LogDebug(TAG, "Successful resultcode from purchase activity.");
             StoreUtils.LogDebug(TAG, "IabPurchase data: " + purchaseData);
-            StoreUtils.LogDebug(TAG, "Data signature: " + dataSignature);
+            //StoreUtils.LogDebug(TAG, "Data signature: " + dataSignature);
             StoreUtils.LogDebug(TAG, "Extras: " + data.getExtras());
             StoreUtils.LogDebug(TAG, "Expected item type: " + mPurchasingItemType);
 
-            if (purchaseData == null || dataSignature == null) {
-                StoreUtils.LogError(TAG, "BUG: either purchaseData or dataSignature is null.");
+            if (purchaseData == null) {
+                StoreUtils.LogError(TAG, "BUG: purchaseData is null.");
                 StoreUtils.LogDebug(TAG, "Extras: " + data.getExtras().toString());
-                result = new IabResult(IabResult.IABHELPER_UNKNOWN_ERROR, "IAB returned null purchaseData or dataSignature");
+                result = new IabResult(IabResult.IABHELPER_UNKNOWN_ERROR, "IAB returned null purchaseData");
                 purchaseFailed(result, null);
                 return true;
             }
 
             IabPurchase purchase = null;
             try {
-                purchase = new IabPurchase(mPurchasingItemType, purchaseData, dataSignature);
+                purchase = new IabPurchase(mPurchasingItemType, purchaseData, null);
                 String sku = purchase.getSku();
 
                 SharedPreferences prefs = new ObscuredSharedPreferences(
@@ -208,7 +208,7 @@ public class NokiaIabHelper extends IabHelper {
                 String publicKey = prefs.getString(NokiaStoreIabService.PUBLICKEY_KEY, "");
 
                 // Verify signature
-                if (!Security.verifyPurchase(publicKey, purchaseData, dataSignature)) {
+                if (!Security.verifyPurchase(publicKey, purchaseData, null)) {
                     StoreUtils.LogError(TAG, "IabPurchase signature verification FAILED for sku " + sku);
                     result = new IabResult(IabResult.IABHELPER_VERIFICATION_FAILED, "Signature verification failed for sku " + sku);
                     purchaseFailed(result, purchase);
@@ -282,7 +282,7 @@ public class NokiaIabHelper extends IabHelper {
             }
 
             StoreUtils.LogDebug(TAG, "Consuming sku: " + sku + ", token: " + token);
-            int response = mService.consumePurchase(3, SoomlaApp.getAppContext().getPackageName(), token);
+            int response = mService.consumePurchase(3, SoomlaApp.getAppContext().getPackageName(), sku, token);
             if (response == IabResult.BILLING_RESPONSE_RESULT_OK) {
                StoreUtils.LogDebug(TAG, "Successfully consumed sku: " + sku);
             }
@@ -537,10 +537,14 @@ public class NokiaIabHelper extends IabHelper {
         boolean verificationFailed = false;
         String continueToken = null;
 
+        ArrayList<String> products = new ArrayList<String>();
+        Bundle queryBundle = new Bundle();
+        queryBundle.putStringArrayList("ITEM_ID_LIST", products);
+
         do {
             StoreUtils.LogDebug(TAG, "Calling getPurchases with continuation token: " + continueToken);
             Bundle ownedItems = mService.getPurchases(3, SoomlaApp.getAppContext().getPackageName(),
-                    itemType, continueToken);
+                    ITEM_TYPE_INAPP, queryBundle, continueToken);
 
             int response = getResponseCodeFromBundle(ownedItems);
             StoreUtils.LogDebug(TAG, "Owned items response: " + String.valueOf(response));
@@ -550,7 +554,8 @@ public class NokiaIabHelper extends IabHelper {
             }
             if (!ownedItems.containsKey(RESPONSE_INAPP_ITEM_LIST)
                     || !ownedItems.containsKey(RESPONSE_INAPP_PURCHASE_DATA_LIST)
-                    || !ownedItems.containsKey(RESPONSE_INAPP_SIGNATURE_LIST)) {
+                    //|| !ownedItems.containsKey(RESPONSE_INAPP_SIGNATURE_LIST)
+                    ) {
                 StoreUtils.LogError(TAG, "Bundle returned from getPurchases() doesn't contain required fields.");
                 return IabResult.IABHELPER_BAD_RESPONSE;
             }
@@ -559,19 +564,19 @@ public class NokiaIabHelper extends IabHelper {
                     RESPONSE_INAPP_ITEM_LIST);
             ArrayList<String> purchaseDataList = ownedItems.getStringArrayList(
                     RESPONSE_INAPP_PURCHASE_DATA_LIST);
-            ArrayList<String> signatureList = ownedItems.getStringArrayList(
-                    RESPONSE_INAPP_SIGNATURE_LIST);
+            //ArrayList<String> signatureList = ownedItems.getStringArrayList(
+            //        RESPONSE_INAPP_SIGNATURE_LIST);
 
             SharedPreferences prefs = new ObscuredSharedPreferences(
                     SoomlaApp.getAppContext().getSharedPreferences(StoreConfig.PREFS_NAME, Context.MODE_PRIVATE));
             String publicKey = prefs.getString(NokiaStoreIabService.PUBLICKEY_KEY, "");
             for (int i = 0; i < purchaseDataList.size(); ++i) {
                 String purchaseData = purchaseDataList.get(i);
-                String signature = signatureList.get(i);
+                //String signature = signatureList.get(i);
                 String sku = ownedSkus.get(i);
-                if (Security.verifyPurchase(publicKey, purchaseData, signature)) {
+                if (Security.verifyPurchase(publicKey, purchaseData, null)) {
                     StoreUtils.LogDebug(TAG, "Sku is owned: " + sku);
-                    IabPurchase purchase = new IabPurchase(itemType, purchaseData, signature);
+                    IabPurchase purchase = new IabPurchase(itemType, purchaseData, null);
 
                     if (TextUtils.isEmpty(purchase.getToken())) {
                         StoreUtils.LogWarning(TAG, "BUG: empty/null token!");
@@ -584,7 +589,7 @@ public class NokiaIabHelper extends IabHelper {
                 else {
                     StoreUtils.LogWarning(TAG, "IabPurchase signature verification **FAILED**. Not adding item.");
                     StoreUtils.LogDebug(TAG, "   IabPurchase data: " + purchaseData);
-                    StoreUtils.LogDebug(TAG, "   Signature: " + signature);
+                    //StoreUtils.LogDebug(TAG, "   Signature: " + signature);
                     verificationFailed = true;
                 }
             }
@@ -671,7 +676,7 @@ public class NokiaIabHelper extends IabHelper {
     private int querySkuDetailsChunk(String itemType, IabInventory inv, ArrayList<String> chunkSkuList) throws RemoteException, JSONException {
         Bundle querySkus = new Bundle();
         querySkus.putStringArrayList(GET_SKU_DETAILS_ITEM_LIST, chunkSkuList);
-        Bundle skuDetails = mService.getSkuDetails(3, SoomlaApp.getAppContext().getPackageName(),
+        Bundle skuDetails = mService.getProductDetails(3, SoomlaApp.getAppContext().getPackageName(),
                 itemType, querySkus);
 
         if (!skuDetails.containsKey(RESPONSE_GET_SKU_DETAILS_LIST)) {

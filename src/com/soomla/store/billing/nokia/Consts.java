@@ -83,30 +83,30 @@ public class Consts {
 
     // These are the names of the extras that are passed in an intent from
     // Market to this application and cannot be changed.
-    public static final String NOTIFICATION_ID = "notification_id";
-    public static final String INAPP_SIGNED_DATA = "inapp_signed_data";
-    public static final String INAPP_SIGNATURE = "inapp_signature";
-    public static final String INAPP_REQUEST_ID = "request_id";
-    public static final String INAPP_RESPONSE_CODE = "response_code";
+    public static final String NOTIFICATION_ID                      = "notification_id";
+    public static final String INAPP_SIGNED_DATA                    = "inapp_signed_data";
+    public static final String INAPP_SIGNATURE                      = "inapp_signature";
+    public static final String INAPP_REQUEST_ID                     = "request_id";
+    public static final String INAPP_RESPONSE_CODE                  = "response_code";
 
     // These are the names of the fields in the request bundle.
-    public static final String BILLING_REQUEST_METHOD = "BILLING_REQUEST";
-    public static final String BILLING_REQUEST_API_VERSION = "API_VERSION";
-    public static final String BILLING_REQUEST_PACKAGE_NAME = "PACKAGE_NAME";
-    public static final String BILLING_REQUEST_ITEM_ID = "ITEM_ID";
-    public static final String BILLING_REQUEST_ITEM_TYPE = "ITEM_TYPE";
-    public static final String BILLING_REQUEST_DEVELOPER_PAYLOAD = "DEVELOPER_PAYLOAD";
-    public static final String BILLING_REQUEST_NOTIFY_IDS = "NOTIFY_IDS";
-    public static final String BILLING_REQUEST_NONCE = "NONCE";
+    public static final String BILLING_REQUEST_METHOD               = "BILLING_REQUEST";
+    public static final String BILLING_REQUEST_API_VERSION          = "API_VERSION";
+    public static final String BILLING_REQUEST_PACKAGE_NAME         = "PACKAGE_NAME";
+    public static final String BILLING_REQUEST_ITEM_ID              = "ITEM_ID";
+    public static final String BILLING_REQUEST_ITEM_TYPE            = "ITEM_TYPE";
+    public static final String BILLING_REQUEST_DEVELOPER_PAYLOAD    = "DEVELOPER_PAYLOAD";
+    public static final String BILLING_REQUEST_NOTIFY_IDS           = "NOTIFY_IDS";
+    public static final String BILLING_REQUEST_NONCE                = "NONCE";
 
-    public static final String BILLING_RESPONSE_RESPONSE_CODE = "RESPONSE_CODE";
-    public static final String BILLING_RESPONSE_PURCHASE_INTENT = "PURCHASE_INTENT";
-    public static final String BILLING_RESPONSE_REQUEST_ID = "REQUEST_ID";
-    public static long BILLING_RESPONSE_INVALID_REQUEST_ID = -1;
+    public static final String BILLING_RESPONSE_RESPONSE_CODE       = "RESPONSE_CODE";
+    public static final String BILLING_RESPONSE_PURCHASE_INTENT     = "PURCHASE_INTENT";
+    public static final String BILLING_RESPONSE_REQUEST_ID          = "REQUEST_ID";
+    public static long BILLING_RESPONSE_INVALID_REQUEST_ID          = -1;
 
     // These are the types supported in the IAB v2
-    public static final String ITEM_TYPE_INAPP = "inapp";
-    public static final String ITEM_TYPE_SUBSCRIPTION = "subs";
+    public static final String ITEM_TYPE_INAPP                      = "inapp";
+    public static final String ITEM_TYPE_SUBSCRIPTION               = "subs";
 
     // (arbitrary) request code for the purchase flow
     public static final int RC_REQUEST = 10001;
