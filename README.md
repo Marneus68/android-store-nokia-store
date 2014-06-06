@@ -14,12 +14,16 @@ The steps to integrate this billing service are also in android-store's [Selecti
 
 1. Clone the repo
 
+    ```
     git clone https://github.com/Marneus68/android-store-nokia-store.git
+    ```
 
 2. Run the build script
 
+    ```
     cd android-store-nokia-store
     ./build_all
+    ```
 
 3. Add `AndroidStoreNokiaStore.jar` from the `build` folder to your project.
 4. Make the following changes in AndroidManifest.xml:
@@ -27,21 +31,21 @@ The steps to integrate this billing service are also in android-store's [Selecti
   Add the following permission (for the Nokia Store):
 
     ```xml
-        <uses-permission android:name="com.nokia.payment.BILLING" />
+    <uses-permission android:name="com.nokia.payment.BILLING" />
     ```
 
     Add the IabActivity to your `application` element, the plugin will spawn a transparent activity to make purchases. Also, you need to tell us what plugin you're using so add a meta-data tag for that:
 
     ```xml
-        <activity android:name="com.soomla.store.billing.nokia.NokiaStoreIabService$IabActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
-        <meta-data android:name="billing.service" android:value="nokia.NokiaStoreIabService" />
+    <activity android:name="com.soomla.store.billing.nokia.NokiaStoreIabService$IabActivity"
+        android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"/>
+    <meta-data android:name="billing.service" android:value="nokia.NokiaStoreIabService" />
     ```
 
 5. After you initialize StoreController, let the plugin know your public key from the dev console:
 
     ```Java
-        NokiaStoreIabService.getInstance().setPublicKey("[YOUR PUBLIC KEY FROM THE MARKET]");
+    NokiaStoreIabService.getInstance().setPublicKey("[YOUR PUBLIC KEY FROM THE MARKET]");
     ```
 
 
@@ -52,13 +56,13 @@ The steps to integrate this billing service are also in android-store's [Selecti
     When you open the store, call:  
 
     ```Java
-        StoreController.getInstance().startIabServiceInBg();
+    StoreController.getInstance().startIabServiceInBg();
     ```
 
     When the store is closed, call:  
 
     ```Java
-        StoreController.getInstance().stopIabServiceInBg();
+    StoreController.getInstance().stopIabServiceInBg();
     ```
 
 
