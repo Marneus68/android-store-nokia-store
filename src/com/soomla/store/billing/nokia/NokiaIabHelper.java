@@ -69,10 +69,10 @@ public class NokiaIabHelper extends IabHelper {
     public static final String RESPONSE_GET_SKU_DETAILS_LIST        = "DETAILS_LIST";
     public static final String RESPONSE_BUY_INTENT                  = "BUY_INTENT";
     public static final String RESPONSE_INAPP_PURCHASE_DATA         = "INAPP_PURCHASE_DATA";
-    public static final String RESPONSE_INAPP_SIGNATURE             = "INAPP_DATA_SIGNATURE";
+    //public static final String RESPONSE_INAPP_SIGNATURE             = "INAPP_DATA_SIGNATURE";
     public static final String RESPONSE_INAPP_ITEM_LIST             = "INAPP_PURCHASE_ITEM_LIST";
     public static final String RESPONSE_INAPP_PURCHASE_DATA_LIST    = "INAPP_PURCHASE_DATA_LIST";
-    public static final String RESPONSE_INAPP_SIGNATURE_LIST        = "INAPP_DATA_SIGNATURE_LIST";
+    //public static final String RESPONSE_INAPP_SIGNATURE_LIST        = "INAPP_DATA_SIGNATURE_LIST";
     public static final String INAPP_CONTINUATION_TOKEN             = "INAPP_CONTINUATION_TOKEN";
 
     // some fields on the getSkuDetails response bundle
@@ -124,6 +124,8 @@ public class NokiaIabHelper extends IabHelper {
             }
         };
 
+        SoomlaApp.getAppContext().bindService(new Intent("com.nokia.payment.iapenabler.InAppBillingService.BIND"), mServiceConn, Context.BIND_AUTO_CREATE);
+        /*
         Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
         serviceIntent.setPackage("com.android.vending");
         if (!SoomlaApp.getAppContext().getPackageManager().queryIntentServices(serviceIntent, 0).isEmpty()) {
@@ -134,6 +136,7 @@ public class NokiaIabHelper extends IabHelper {
             // no service available to handle that Intent
             setupFailed(new IabResult(IabResult.BILLING_RESPONSE_RESULT_BILLING_UNAVAILABLE, "Billing service unavailable on device."));
         }
+        */
     }
 
     /**
@@ -200,7 +203,7 @@ public class NokiaIabHelper extends IabHelper {
 
             IabPurchase purchase = null;
             try {
-                purchase = new IabPurchase(mPurchasingItemType, purchaseData, null);
+                purchase = new IabPurchase(mPurchasingItemType, purchaseData, "");
                 String sku = purchase.getSku();
 
                 SharedPreferences prefs = new ObscuredSharedPreferences(
@@ -208,7 +211,7 @@ public class NokiaIabHelper extends IabHelper {
                 String publicKey = prefs.getString(NokiaStoreIabService.PUBLICKEY_KEY, "");
 
                 // Verify signature
-                if (!Security.verifyPurchase(publicKey, purchaseData, null)) {
+                if (!Security.verifyPurchase(publicKey, purchaseData)) {
                     StoreUtils.LogError(TAG, "IabPurchase signature verification FAILED for sku " + sku);
                     result = new IabResult(IabResult.IABHELPER_VERIFICATION_FAILED, "Signature verification failed for sku " + sku);
                     purchaseFailed(result, purchase);
@@ -235,7 +238,7 @@ public class NokiaIabHelper extends IabHelper {
         else if (resultCode == Activity.RESULT_CANCELED) {
             StoreUtils.LogDebug(TAG, "IabPurchase canceled. Response: " + IabResult.getResponseDesc(responseCode));
             try {
-                IabPurchase purchase = new IabPurchase(mPurchasingItemType, "{\"productId\":" + mPurchasingItemSku + "}", null);
+                IabPurchase purchase = new IabPurchase(mPurchasingItemType, "{\"productId\":" + mPurchasingItemSku + "}", "");
                 result = new IabResult(IabResult.BILLING_RESPONSE_RESULT_USER_CANCELED, "User canceled.");
                 purchaseFailed(result, purchase);
             } catch (JSONException e) {
@@ -412,7 +415,7 @@ public class NokiaIabHelper extends IabHelper {
             if (response != IabResult.BILLING_RESPONSE_RESULT_OK) {
                 StoreUtils.LogError(TAG, "Unable to buy item, Error response: " + IabResult.getResponseDesc(response));
 
-                IabPurchase failPurchase = new IabPurchase(ITEM_TYPE_INAPP, "{\"productId\":" + sku + "}", null);
+                IabPurchase failPurchase = new IabPurchase(ITEM_TYPE_INAPP, "{\"productId\":" + sku + "}", "");
                 result = new IabResult(response, "Unable to buy item");
                 purchaseFailed(result, failPurchase);
                 act.finish();
@@ -574,9 +577,9 @@ public class NokiaIabHelper extends IabHelper {
                 String purchaseData = purchaseDataList.get(i);
                 //String signature = signatureList.get(i);
                 String sku = ownedSkus.get(i);
-                if (Security.verifyPurchase(publicKey, purchaseData, null)) {
+                if (Security.verifyPurchase(publicKey, purchaseData)) {
                     StoreUtils.LogDebug(TAG, "Sku is owned: " + sku);
-                    IabPurchase purchase = new IabPurchase(itemType, purchaseData, null);
+                    IabPurchase purchase = new IabPurchase(itemType, purchaseData, "");
 
                     if (TextUtils.isEmpty(purchase.getToken())) {
                         StoreUtils.LogWarning(TAG, "BUG: empty/null token!");
