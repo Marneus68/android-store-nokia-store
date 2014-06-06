@@ -43,6 +43,7 @@ import com.soomla.store.billing.IabPurchase;
 import com.soomla.store.billing.IabResult;
 import com.soomla.store.billing.IabSkuDetails;
 import com.soomla.store.data.ObscuredSharedPreferences;
+import com.soomla.store.data.StoreInfo;
 
 import org.json.JSONException;
 
@@ -92,6 +93,7 @@ public class NokiaIabHelper extends IabHelper {
      * See parent
      */
     protected void startSetupInner() {
+        StoreUtils.LogDebug(TAG, "startSetupInner launched");
         mServiceConn = new ServiceConnection() {
             @Override
             public void onServiceDisconnected(ComponentName name) {
@@ -540,7 +542,9 @@ public class NokiaIabHelper extends IabHelper {
         boolean verificationFailed = false;
         String continueToken = null;
 
-        ArrayList<String> products = new ArrayList<String>();
+
+        //TODO: Tofix
+        ArrayList<String> products = new ArrayList<String>(StoreInfo.getAllProductIds());
         Bundle queryBundle = new Bundle();
         queryBundle.putStringArrayList("ITEM_ID_LIST", products);
 
