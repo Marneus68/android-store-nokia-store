@@ -23,7 +23,8 @@ package com.soomla.store.billing.nokia;
  * to support in-app billing.
  */
 public class Consts {
-    // The response codes for a request, defined by Android Market.
+    // The response codes for a request, defined by the Nokia Store documentation (http://developer.nokia.com/resources/library/nokia-x/nokia-in-app-payment/nokia-in-app-payment-developer-guide/inokiaiapservice-reference.html)
+    /*
     public enum ResponseCode {
         RESULT_OK,
         RESULT_USER_CANCELED,
@@ -42,6 +43,36 @@ public class Consts {
             return values[index];
         }
     }
+    */
+
+    public enum ResponseCode {
+        RESULT_OK(0),
+        RESULT_USER_CANCELED(1),
+        //RESULT_SERVICE_UNAVAILABLE,
+        RESULT_BILLING_UNAVAILABLE(3),
+        RESULT_ITEM_UNAVAILABLE(4),
+        RESULT_DEVELOPER_ERROR(5),
+        RESULT_ERROR(6),
+        RESULT_ITEM_ALREADY_OWNED(7),
+        RESULT_ITEM_NOT_OWNED(8),
+        RESULT_NO_SIM(9);
+
+        private final int code;
+
+        ResponseCode(int code) {
+            this.code = code;
+        }
+
+        // Converts from an ordinal value to the ResponseCode
+        public static ResponseCode valueOf(int index) {
+            ResponseCode[] values = ResponseCode.values();
+            if (index < 0 || index >= values.length) {
+                return RESULT_ERROR;
+            }
+            return values[index];
+        }
+    }
+
 
     // The possible states of an in-app purchase, as defined by Android Market.
     public enum PurchaseState {
