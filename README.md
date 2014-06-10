@@ -49,7 +49,7 @@ The steps to integrate this billing service are also in android-store's [Selecti
     ```
 
 
-6. The Nokia Store doesn't allow test purchases per say. The only way for you to test out the In App elements will be to assignspecified test ID's to your elements as described [here](http://developer.nokia.com/resources/library/nokia-x/nokia-in-app-payment/nokia-in-app-payment-porting-guide.html#toc_TestingInAppPurchases). The complementary list of ID's available for testing can be found [here](http://developer.nokia.com/resources/library/nokia-x/nokia-in-app-payment/nokia-in-app-payment-developer-guide/product-ids-for-testing-purposes.html).
+6. The Nokia Store doesn't allow test purchases per say. The only way for you to test out the In App elements is to assign specified test ID's to your elements as described [here](http://developer.nokia.com/resources/library/nokia-x/nokia-in-app-payment/nokia-in-app-payment-porting-guide.html#toc_TestingInAppPurchases). The complete list of ID's available for testing can be found [here](http://developer.nokia.com/resources/library/nokia-x/nokia-in-app-payment/nokia-in-app-payment-developer-guide/product-ids-for-testing-purposes.html).
 
     For the Nokia Store, it is recommend that you open the IAB Service and keep it open in the background in cases where you have an in-game storefront. This is how you do that:
 
