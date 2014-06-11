@@ -92,25 +92,19 @@ public class Consts {
     }
 
     /** This is the action we use to bind to the MarketBillingService. */
-    public static final String MARKET_BILLING_SERVICE_ACTION =
-        "com.nokia.payment.iapenabler.InAppBillingService.BIND";
+    public static final String MARKET_BILLING_SERVICE_ACTION        = "com.nokia.payment.iapenabler.InAppBillingService.BIND";
 
     // Intent actions that we send from the BillingReceiver to the
     // BillingService.  Defined by this application.
-    public static final String ACTION_CONFIRM_NOTIFICATION =
-            "com.example.subscriptions.CONFIRM_NOTIFICATION";
-    public static final String ACTION_GET_PURCHASE_INFORMATION =
-            "com.example.subscriptions.GET_PURCHASE_INFORMATION";
-    public static final String ACTION_RESTORE_TRANSACTIONS =
-            "com.example.subscriptions.RESTORE_TRANSACTIONS";
+    public static final String ACTION_CONFIRM_NOTIFICATION          = "com.example.subscriptions.CONFIRM_NOTIFICATION";
+    public static final String ACTION_GET_PURCHASE_INFORMATION      = "com.example.subscriptions.GET_PURCHASE_INFORMATION";
+    public static final String ACTION_RESTORE_TRANSACTIONS          = "com.example.subscriptions.RESTORE_TRANSACTIONS";
 
     // Intent actions that we receive in the BillingReceiver from Market.
     // These are defined by Market and cannot be changed.
-    public static final String ACTION_NOTIFY = "com.android.vending.billing.IN_APP_NOTIFY";
-    public static final String ACTION_RESPONSE_CODE =
-        "com.android.vending.billing.RESPONSE_CODE";
-    public static final String ACTION_PURCHASE_STATE_CHANGED =
-        "com.android.vending.billing.PURCHASE_STATE_CHANGED";
+    public static final String ACTION_NOTIFY                        = "com.nokia.payment.billing.IN_APP_NOTIFY";
+    public static final String ACTION_RESPONSE_CODE                 = "com.nokia.payment.billing.RESPONSE_CODE";
+    public static final String ACTION_PURCHASE_STATE_CHANGED        = "com.nokia.payment.billing.PURCHASE_STATE_CHANGED";
 
     // These are the names of the extras that are passed in an intent from
     // Market to this application and cannot be changed.
