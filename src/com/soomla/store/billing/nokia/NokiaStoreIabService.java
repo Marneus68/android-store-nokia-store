@@ -126,9 +126,9 @@ public class NokiaStoreIabService implements IIabService {
     }
 
     /**
-     * Sets the public key for Nokia Store IAB Service.
-     * This function MUST be called once when the application loads and after StoreController
-     * initializes.
+     * The Nokia Store IAB Service doesn't require a public key, calling this method is
+     * oprionnal and it only exists to make it easier for people migrating from the
+     * Google Play billing plugin for Soomla.
      *
      * @param publicKey the public key from the developer console.
      */
@@ -140,8 +140,8 @@ public class NokiaStoreIabService implements IIabService {
         if (publicKey != null && publicKey.length() != 0) {
             edit.putString(PUBLICKEY_KEY, publicKey);
         } else if (prefs.getString(PUBLICKEY_KEY, "").length() == 0) {
-            String err = "publicKey is null or empty. Can't initialize store!!";
-            StoreUtils.LogError(TAG, err);
+            StoreUtils.LogDebug(TAG, "publicKey is null or empty. Don't fret, it's no big deal");
+            edit.putString(PUBLICKEY_KEY, "");
         }
         edit.commit();
     }
