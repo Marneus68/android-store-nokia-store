@@ -157,11 +157,12 @@ public class NokiaStoreIabService implements IIabService {
         SharedPreferences prefs = new ObscuredSharedPreferences(SoomlaApp.getAppContext().
                 getSharedPreferences(StoreConfig.PREFS_NAME, Context.MODE_PRIVATE));
         String publicKey = prefs.getString(PUBLICKEY_KEY, "");
+        /*
         if (publicKey.length() == 0 || publicKey.equals("[YOUR PUBLIC KEY FROM THE MARKET]")) {
             StoreUtils.LogError(TAG, "You didn't provide a public key! You can't make purchases. the key: " + publicKey);
             throw new IllegalStateException();
         }
-
+        */
 
         try {
             final Intent intent = new Intent(SoomlaApp.getAppContext(), IabActivity.class);
