@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-//package com.soomla.store.billing.google;
 package com.soomla.store.billing.nokia;
 
 import android.app.Activity;
@@ -41,7 +40,6 @@ import com.soomla.store.billing.IabInventory;
 import com.soomla.store.billing.IabPurchase;
 import com.soomla.store.billing.IabResult;
 import com.soomla.store.billing.IabSkuDetails;
-//import com.soomla.store.data.ObscuredSharedPreferences;
 
 import com.soomla.store.data.StoreInfo;
 
@@ -60,9 +58,6 @@ import java.util.Set;
  */
 public class NokiaIabHelper extends IabHelper {
 
-    // uncomment to verify big chunk google bug (over 20)
-//    public static final int SKU_QUERY_MAX_CHUNK_SIZE = 50;
-
     public static final int SKU_QUERY_MAX_CHUNK_SIZE = 19;
 
     // Keys for the responses from InAppBillingService
@@ -70,10 +65,8 @@ public class NokiaIabHelper extends IabHelper {
     public static final String RESPONSE_GET_SKU_DETAILS_LIST        = "DETAILS_LIST";
     public static final String RESPONSE_BUY_INTENT                  = "BUY_INTENT";
     public static final String RESPONSE_INAPP_PURCHASE_DATA         = "INAPP_PURCHASE_DATA";
-    //public static final String RESPONSE_INAPP_SIGNATURE             = "INAPP_DATA_SIGNATURE";
     public static final String RESPONSE_INAPP_ITEM_LIST             = "INAPP_PURCHASE_ITEM_LIST";
     public static final String RESPONSE_INAPP_PURCHASE_DATA_LIST    = "INAPP_PURCHASE_DATA_LIST";
-    //public static final String RESPONSE_INAPP_SIGNATURE_LIST        = "INAPP_DATA_SIGNATURE_LIST";
     public static final String INAPP_CONTINUATION_TOKEN             = "INAPP_CONTINUATION_TOKEN";
 
     // some fields on the getSkuDetails response bundle
@@ -127,18 +120,6 @@ public class NokiaIabHelper extends IabHelper {
         };
 
         SoomlaApp.getAppContext().bindService(new Intent("com.nokia.payment.iapenabler.InAppBillingService.BIND"), mServiceConn, Context.BIND_AUTO_CREATE);
-        /*
-        Intent serviceIntent = new Intent("com.android.vending.billing.InAppBillingService.BIND");
-        serviceIntent.setPackage("com.android.vending");
-        if (!SoomlaApp.getAppContext().getPackageManager().queryIntentServices(serviceIntent, 0).isEmpty()) {
-            // service available to handle that Intent
-            SoomlaApp.getAppContext().bindService(serviceIntent, mServiceConn, Context.BIND_AUTO_CREATE);
-        }
-        else {
-            // no service available to handle that Intent
-            setupFailed(new IabResult(IabResult.BILLING_RESPONSE_RESULT_BILLING_UNAVAILABLE, "Billing service unavailable on device."));
-        }
-        */
     }
 
     /**
@@ -191,7 +172,6 @@ public class NokiaIabHelper extends IabHelper {
         if (resultCode == Activity.RESULT_OK && responseCode == IabResult.BILLING_RESPONSE_RESULT_OK) {
             SoomlaUtils.LogDebug(TAG, "Successful resultcode from purchase activity.");
             SoomlaUtils.LogDebug(TAG, "IabPurchase data: " + purchaseData);
-            //SoomlaUtils.LogDebug(TAG, "Data signature: " + dataSignature);
             SoomlaUtils.LogDebug(TAG, "Extras: " + data.getExtras());
             SoomlaUtils.LogDebug(TAG, "Expected item type: " + mPurchasingItemType);
 
@@ -571,15 +551,12 @@ public class NokiaIabHelper extends IabHelper {
                     RESPONSE_INAPP_ITEM_LIST);
             ArrayList<String> purchaseDataList = ownedItems.getStringArrayList(
                     RESPONSE_INAPP_PURCHASE_DATA_LIST);
-            //ArrayList<String> signatureList = ownedItems.getStringArrayList(
-            //        RESPONSE_INAPP_SIGNATURE_LIST);
 
             SharedPreferences prefs = 
                     SoomlaApp.getAppContext().getSharedPreferences(SoomlaConfig.PREFS_NAME, Context.MODE_PRIVATE);
             String publicKey = prefs.getString(NokiaStoreIabService.PUBLICKEY_KEY, "");
             for (int i = 0; i < purchaseDataList.size(); ++i) {
                 String purchaseData = purchaseDataList.get(i);
-                //String signature = signatureList.get(i);
                 String sku = ownedSkus.get(i);
                 if (Security.verifyPurchase(publicKey, purchaseData)) {
                     SoomlaUtils.LogDebug(TAG, "Sku is owned: " + sku);
@@ -596,7 +573,6 @@ public class NokiaIabHelper extends IabHelper {
                 else {
                     SoomlaUtils.LogWarning(TAG, "IabPurchase signature verification **FAILED**. Not adding item.");
                     SoomlaUtils.LogDebug(TAG, "   IabPurchase data: " + purchaseData);
-                    //SoomlaUtils.LogDebug(TAG, "   Signature: " + signature);
                     verificationFailed = true;
                 }
             }
