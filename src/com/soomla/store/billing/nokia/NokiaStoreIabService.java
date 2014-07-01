@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-//package com.soomla.store.billing.google;
 package com.soomla.store.billing.nokia;
 
 import android.app.Activity;
@@ -22,10 +21,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import com.soomla.store.SoomlaApp;
-import com.soomla.store.StoreConfig;
-import com.soomla.store.StoreController;
-import com.soomla.store.StoreUtils;
+import com.soomla.SoomlaConfig;
+import com.soomla.SoomlaUtils;
+import com.soomla.SoomlaApp;
+import com.soomla.store.SoomlaStore;
 import com.soomla.store.billing.IIabService;
 import com.soomla.store.billing.IabCallbacks;
 import com.soomla.store.billing.IabException;
@@ -34,7 +33,7 @@ import com.soomla.store.billing.IabResult;
 import com.soomla.store.billing.IabInventory;
 import com.soomla.store.billing.IabPurchase;
 import com.soomla.store.billing.IabSkuDetails;
-import com.soomla.store.data.ObscuredSharedPreferences;
+//import com.soomla.store.data.ObscuredSharedPreferences;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,14 +132,14 @@ public class NokiaStoreIabService implements IIabService {
      * @param publicKey the public key from the developer console.
      */
     public void setPublicKey(String publicKey) {
-        SharedPreferences prefs = new ObscuredSharedPreferences(SoomlaApp.getAppContext().
-                getSharedPreferences(StoreConfig.PREFS_NAME, Context.MODE_PRIVATE));
+        SharedPreferences prefs = SoomlaApp.getAppContext().
+                getSharedPreferences(SoomlaConfig.PREFS_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = prefs.edit();
 
         if (publicKey != null && publicKey.length() != 0) {
             edit.putString(PUBLICKEY_KEY, publicKey);
         } else if (prefs.getString(PUBLICKEY_KEY, "").length() == 0) {
-            StoreUtils.LogDebug(TAG, "publicKey is null or empty. Don't fret, it's no big deal");
+            SoomlaUtils.LogDebug(TAG, "publicKey is null or empty. Don't fret, it's no big deal");
             edit.putString(PUBLICKEY_KEY, "");
         }
         edit.commit();
@@ -154,12 +153,12 @@ public class NokiaStoreIabService implements IIabService {
                                    final IabCallbacks.OnPurchaseListener purchaseListener,
                                    String extraData) {
 
-        SharedPreferences prefs = new ObscuredSharedPreferences(SoomlaApp.getAppContext().
-                getSharedPreferences(StoreConfig.PREFS_NAME, Context.MODE_PRIVATE));
+        SharedPreferences prefs = SoomlaApp.getAppContext().
+                getSharedPreferences(SoomlaConfig.PREFS_NAME, Context.MODE_PRIVATE);
         String publicKey = prefs.getString(PUBLICKEY_KEY, "");
         /*
         if (publicKey.length() == 0 || publicKey.equals("[YOUR PUBLIC KEY FROM THE MARKET]")) {
-            StoreUtils.LogError(TAG, "You didn't provide a public key! You can't make purchases. the key: " + publicKey);
+            SoomlaUtils.LogError(TAG, "You didn't provide a public key! You can't make purchases. the key: " + publicKey);
             throw new IllegalStateException();
         }
         */
@@ -175,7 +174,7 @@ public class NokiaStoreIabService implements IIabService {
 
         } catch(Exception e){
             String msg = "(launchPurchaseFlow) Error purchasing item " + e.getMessage();
-            StoreUtils.LogError(TAG, msg);
+            SoomlaUtils.LogError(TAG, msg);
             purchaseListener.fail(msg);
         }
 
@@ -193,7 +192,7 @@ public class NokiaStoreIabService implements IIabService {
     private synchronized void startIabHelper(OnIabSetupFinishedListener onIabSetupFinishedListener) {
         if (isIabServiceInitialized())
         {
-            StoreUtils.LogDebug(TAG, "The helper is started. Just running the post start function.");
+            SoomlaUtils.LogDebug(TAG, "The helper is started. Just running the post start function.");
 
             if (onIabSetupFinishedListener != null && onIabSetupFinishedListener.getIabInitListener() != null) {
                 onIabSetupFinishedListener.getIabInitListener().success(true);
@@ -201,10 +200,10 @@ public class NokiaStoreIabService implements IIabService {
             return;
         }
 
-        StoreUtils.LogDebug(TAG, "Creating IAB helper.");
+        SoomlaUtils.LogDebug(TAG, "Creating IAB helper.");
         mHelper = new NokiaIabHelper();
 
-        StoreUtils.LogDebug(TAG, "IAB helper Starting setup.");
+        SoomlaUtils.LogDebug(TAG, "IAB helper Starting setup.");
         mHelper.startSetup(onIabSetupFinishedListener);
     }
 
@@ -217,7 +216,7 @@ public class NokiaStoreIabService implements IIabService {
             if (iabInitListener != null) {
                 iabInitListener.fail(msg);
             } else {
-                StoreUtils.LogDebug(TAG, msg);
+                SoomlaUtils.LogDebug(TAG, msg);
             }
             return;
         }
@@ -227,14 +226,14 @@ public class NokiaStoreIabService implements IIabService {
             if (iabInitListener != null) {
                 iabInitListener.fail(msg);
             } else {
-                StoreUtils.LogDebug(TAG, msg);
+                SoomlaUtils.LogDebug(TAG, msg);
             }
             return;
         }
 
         if (!mHelper.isAsyncInProgress())
         {
-            StoreUtils.LogDebug(TAG, "Stopping Nokia Service");
+            SoomlaUtils.LogDebug(TAG, "Stopping Nokia Service");
             mHelper.dispose();
             mHelper = null;
             if (iabInitListener != null) {
@@ -247,7 +246,7 @@ public class NokiaStoreIabService implements IIabService {
             if (iabInitListener != null) {
                 iabInitListener.fail(msg);
             } else {
-                StoreUtils.LogDebug(TAG, msg);
+                SoomlaUtils.LogDebug(TAG, msg);
             }
         }
     }
@@ -267,7 +266,7 @@ public class NokiaStoreIabService implements IIabService {
 
         @Override
         public void onRestorePurchasessFinished(IabResult result, IabInventory inventory) {
-            StoreUtils.LogDebug(TAG, "Restore Purchases succeeded");
+            SoomlaUtils.LogDebug(TAG, "Restore Purchases succeeded");
             if (result.getResponse() == IabResult.BILLING_RESPONSE_RESULT_OK && mRestorePurchasesListener != null) {
                 // fetching owned items
                 List<String> itemSkus = inventory.getAllOwnedSkus(IabHelper.ITEM_TYPE_INAPP);
@@ -279,7 +278,7 @@ public class NokiaStoreIabService implements IIabService {
 
                 this.mRestorePurchasesListener.success(purchases);
             } else {
-                StoreUtils.LogError(TAG, "Wither mRestorePurchasesListener==null OR Restore purchases error: " + result.getMessage());
+                SoomlaUtils.LogError(TAG, "Wither mRestorePurchasesListener==null OR Restore purchases error: " + result.getMessage());
                 if (this.mRestorePurchasesListener != null) this.mRestorePurchasesListener.fail(result.getMessage());
             }
 
@@ -301,7 +300,7 @@ public class NokiaStoreIabService implements IIabService {
 
         @Override
         public void onFetchSkusDetailsFinished(IabResult result, IabInventory inventory) {
-            StoreUtils.LogDebug(TAG, "Restore Purchases succeeded");
+            SoomlaUtils.LogDebug(TAG, "Restore Purchases succeeded");
             if (result.getResponse() == IabResult.BILLING_RESPONSE_RESULT_OK && mFetchSkusDetailsListener != null) {
 
                 // @lassic (May 1st): actually, here (query finished) it only makes sense to get the details
@@ -317,7 +316,7 @@ public class NokiaStoreIabService implements IIabService {
 
                 this.mFetchSkusDetailsListener.success(skuDetails);
             } else {
-                StoreUtils.LogError(TAG, "Wither mFetchSkusDetailsListener==null OR Fetching details error: " + result.getMessage());
+                SoomlaUtils.LogError(TAG, "Wither mFetchSkusDetailsListener==null OR Fetching details error: " + result.getMessage());
                 if (this.mFetchSkusDetailsListener != null) this.mFetchSkusDetailsListener.fail(result.getMessage());
             }
 
@@ -343,7 +342,7 @@ public class NokiaStoreIabService implements IIabService {
         @Override
         public void onIabSetupFinished(IabResult result) {
 
-            StoreUtils.LogDebug(TAG, "IAB helper Setup finished.");
+            SoomlaUtils.LogDebug(TAG, "IAB helper Setup finished.");
             if (result.isFailure()) {
                 if (mIabInitListener != null) mIabInitListener.fail(result.getMessage());
                 return;
@@ -366,7 +365,7 @@ public class NokiaStoreIabService implements IIabService {
             /**
              * Wait to see if the purchase succeeded, then start the consumption process.
              */
-            StoreUtils.LogDebug(TAG, "IabPurchase finished: " + result + ", purchase: " + purchase);
+            SoomlaUtils.LogDebug(TAG, "IabPurchase finished: " + result + ", purchase: " + purchase);
 
             NokiaStoreIabService.getInstance().mWaitingServiceResponse = false;
 
@@ -413,7 +412,7 @@ public class NokiaStoreIabService implements IIabService {
                 finish();
 
                 String msg = "Error purchasing item " + e.getMessage();
-                StoreUtils.LogError(TAG, msg);
+                SoomlaUtils.LogError(TAG, msg);
                 NokiaStoreIabService.getInstance().mWaitingServiceResponse = false;
                 if (NokiaStoreIabService.getInstance().mSavedOnPurchaseListener != null) {
                     NokiaStoreIabService.getInstance().mSavedOnPurchaseListener.fail(msg);
@@ -443,7 +442,7 @@ public class NokiaStoreIabService implements IIabService {
             {
                 NokiaStoreIabService.getInstance().mWaitingServiceResponse = false;
                 String err = "IabActivity is destroyed during purchase.";
-                StoreUtils.LogError(TAG, err);
+                SoomlaUtils.LogError(TAG, err);
                 if (NokiaStoreIabService.getInstance().mSavedOnPurchaseListener != null) {
                     NokiaStoreIabService.getInstance().mSavedOnPurchaseListener.fail(err);
                     NokiaStoreIabService.getInstance().mSavedOnPurchaseListener = null;
@@ -456,7 +455,7 @@ public class NokiaStoreIabService implements IIabService {
 
 
     public static NokiaStoreIabService getInstance() {
-        return (NokiaStoreIabService) StoreController.getInstance().getInAppBillingService();
+        return (NokiaStoreIabService) SoomlaStore.getInstance().getInAppBillingService();
     }
 
 

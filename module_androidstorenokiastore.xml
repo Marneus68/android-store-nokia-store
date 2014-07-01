@@ -20,22 +20,26 @@
   <path id="androidstorenokiastore.module.production.classpath">
     <path refid="${module.jdk.classpath.androidstorenokiastore}"/>
     <pathelement location="${basedir}/libs/AndroidStore.jar"/>
+    <pathelement location="${basedir}/libs/SoomlaAndroidCore.jar"/>
   </path>
   
   <path id="androidstorenokiastore.runtime.production.module.classpath">
     <pathelement location="${androidstorenokiastore.output.dir}"/>
     <pathelement location="${basedir}/libs/AndroidStore.jar"/>
+    <pathelement location="${basedir}/libs/SoomlaAndroidCore.jar"/>
   </path>
   
   <path id="androidstorenokiastore.module.classpath">
     <path refid="${module.jdk.classpath.androidstorenokiastore}"/>
     <pathelement location="${androidstorenokiastore.output.dir}"/>
     <pathelement location="${basedir}/libs/AndroidStore.jar"/>
+    <pathelement location="${basedir}/libs/SoomlaAndroidCore.jar"/>
   </path>
   
   <path id="androidstorenokiastore.runtime.module.classpath">
     <pathelement location="${androidstorenokiastore.output.dir}"/>
     <pathelement location="${basedir}/libs/AndroidStore.jar"/>
+    <pathelement location="${basedir}/libs/SoomlaAndroidCore.jar"/>
   </path>
   
   
