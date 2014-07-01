@@ -126,10 +126,10 @@ public class NokiaStoreIabService implements IIabService {
 
     /**
      * The Nokia Store IAB Service doesn't require a public key, calling this method is
-     * oprionnal and it only exists to make it easier for people migrating from the
+     * optionnal and it only exists to make it easier for people migrating from the
      * Google Play billing plugin for Soomla.
      *
-     * @param publicKey the public key from the developer console.
+     * @param publicKey can be anything really.
      */
     public void setPublicKey(String publicKey) {
         SharedPreferences prefs = SoomlaApp.getAppContext().
@@ -137,11 +137,11 @@ public class NokiaStoreIabService implements IIabService {
         SharedPreferences.Editor edit = prefs.edit();
 
         if (publicKey != null && publicKey.length() != 0) {
-            edit.putString(PUBLICKEY_KEY, publicKey);
+            SoomlaUtils.LogDebug(TAG, "publicKey set. It won't be used any way.");
         } else if (prefs.getString(PUBLICKEY_KEY, "").length() == 0) {
-            SoomlaUtils.LogDebug(TAG, "publicKey is null or empty. Don't fret, it's no big deal");
-            edit.putString(PUBLICKEY_KEY, "");
+            SoomlaUtils.LogDebug(TAG, "publicKey is null or empty. Don't fret, it's no big deal.");
         }
+        edit.putString(PUBLICKEY_KEY, "");
         edit.commit();
     }
 
@@ -165,12 +165,19 @@ public class NokiaStoreIabService implements IIabService {
 
         try {
             final Intent intent = new Intent(SoomlaApp.getAppContext(), IabActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra(SKU, sku);
             intent.putExtra(EXTRA_DATA, extraData);
 
             mSavedOnPurchaseListener = purchaseListener;
-            SoomlaApp.getAppContext().startActivity(intent);
+            //SoomlaApp.getAppContext().startActivity(intent);
+            if (SoomlaApp.getAppContext() instanceof Activity) {
+                Activity activity = (Activity) SoomlaApp.getAppContext();
+                activity.startActivity(intent);
+            } else {
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                SoomlaApp.getAppContext().startActivity(intent);
+            }
 
         } catch(Exception e){
             String msg = "(launchPurchaseFlow) Error purchasing item " + e.getMessage();
