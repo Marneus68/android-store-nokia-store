@@ -12,21 +12,14 @@ In order to work with this plugin you first need to go over android-store's [Get
 
 The steps to integrate this billing service are also in android-store's [Selecting Billing Service](https://github.com/soomla/android-store#google-play) but we will also write them here for convenience:
 
-1. Clone the repo
+1. Clone this repo
 
     ```
     git clone https://github.com/Marneus68/android-store-nokia-store.git
     ```
 
-2. Run the build script
-
-    ```
-    cd android-store-nokia-store
-    ./build_all
-    ```
-
-3. Add `AndroidStoreNokiaStore.jar` from the `build` folder to your project.
-4. Make the following changes in AndroidManifest.xml:
+2. Add `AndroidStoreNokiaStore.jar` from the `build` folder to your project.
+3. Make the following changes in AndroidManifest.xml:
 
   Add the following permission (for the Nokia Store):
 
@@ -42,14 +35,14 @@ The steps to integrate this billing service are also in android-store's [Selecti
     <meta-data android:name="billing.service" android:value="nokia.NokiaStoreIabService" />
     ```
 
-5. Since the Nokia Store doesn't work with a public key like Google Play, the `setPublicKey` method won't do anything. However, to maintain a full compatibility with the Google Play Iab Plugin, this method still exists. No matter what you provide it with, this will not impact the use of the billing plugin in any way.
+4. Since the Nokia Store doesn't work with a public key like Google Play, the `setPublicKey` method won't do anything. However, to maintain a full compatibility with the Google Play Iab Plugin, this method still exists. No matter what you provide it with, this will not impact the use of the billing plugin in any way.
 
     ```Java
     NokiaStoreIabService.getInstance().setPublicKey("foo");
     ```
 
 
-6. The Nokia Store doesn't allow test purchases per say. The only way for you to test out the In App elements is to assign specified test ID's to your elements as described [here](http://developer.nokia.com/resources/library/nokia-x/nokia-in-app-payment/nokia-in-app-payment-porting-guide.html#toc_TestingInAppPurchases). The complete list of ID's available for testing can be found [here](http://developer.nokia.com/resources/library/nokia-x/nokia-in-app-payment/nokia-in-app-payment-developer-guide/product-ids-for-testing-purposes.html).
+5. The Nokia Store doesn't allow test purchases per say. The only way for you to test out the In App elements is to assign specified test ID's to your elements as described [here](http://developer.nokia.com/resources/library/nokia-x/nokia-in-app-payment/nokia-in-app-payment-porting-guide.html#toc_TestingInAppPurchases). The complete list of ID's available for testing can be found [here](http://developer.nokia.com/resources/library/nokia-x/nokia-in-app-payment/nokia-in-app-payment-developer-guide/product-ids-for-testing-purposes.html).
 
     For the Nokia Store, it is recommend that you open the IAB Service and keep it open in the background in cases where you have an in-game storefront. This is how you do that:
 
@@ -64,7 +57,15 @@ The steps to integrate this billing service are also in android-store's [Selecti
     ```Java
     StoreController.getInstance().stopIabServiceInBg();
     ```
+## Building
 
+In case you want to rebuild the project, you can run the buil script. Remember that the repo includes a pre-build jar in the `build` folder.
+
+    ```
+    ./build_all
+    ```
+
+If you run into any trouble while executing the build script, check the [android-store-nokia-store.properties](https://github.com/Marneus68/android-store-nokia-store/blob/master/android-store-nokia-store.properties) file and tweak variables to match your system configuration.
 
 ## Contribution
 
