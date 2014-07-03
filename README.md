@@ -56,14 +56,15 @@ The steps to integrate this billing service are also in android-store's [Selecti
 
     ```Java
     StoreController.getInstance().stopIabServiceInBg();
-    ```
+    ```  
+
+
+
 ## Building
 
 In case you want to rebuild the project, you can run the buil script. Remember that the repo includes a pre-build jar in the `build` folder.
 
-    ```
     ./build_all
-    ```
 
 If you run into any trouble while executing the build script, check the [android-store-nokia-store.properties](https://github.com/Marneus68/android-store-nokia-store/blob/master/android-store-nokia-store.properties) file and tweak variables to match your system configuration.
 
