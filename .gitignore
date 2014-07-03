@@ -31,3 +31,7 @@ proguard/
 *.ipr
 *.iws
 .idea/
+
+# Project specific files
+android-store-nokia-store.properties
+./android-store-nokia-store.properties

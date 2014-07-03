@@ -2,7 +2,7 @@
 
 ## android-store-nokia-store
 
-This project is an attempt at making a billing service plugin for [android-store](https://github.com/soomla/android-store) that support the Nokia Store for the Nokia X device family. It should be working right now, but it still requires some in-depth testing. See [Contribution](##Contribution) for more details.
+This project is billing service plugin for [android-store](https://github.com/soomla/android-store) that support the Nokia Store for the Nokia X device family. It should be working right now, but may require some in-depth testing. See [Contribution](##Contribution) for more details.
 
 The modifications made to the original Google Play billing plugin have been done according [to the procedure described here](http://developer.nokia.com/resources/library/nokia-x/nokia-in-app-payment/nokia-in-app-payment-porting-guide.html).
 
@@ -42,10 +42,10 @@ The steps to integrate this billing service are also in android-store's [Selecti
     <meta-data android:name="billing.service" android:value="nokia.NokiaStoreIabService" />
     ```
 
-5. After you initialize StoreController, let the plugin know your public key from the dev console:
+5. Since the Nokia Store doesn't work with a public key like Google Play, the `setPublicKey` method won't do anything. However, to maintain a full compatibility with the Google Play Iab Plugin, this method still exists. No matter what you provide it with, this will not impact the use of the billing plugin in any way.
 
     ```Java
-    NokiaStoreIabService.getInstance().setPublicKey("[YOUR PUBLIC KEY FROM THE MARKET]");
+    NokiaStoreIabService.getInstance().setPublicKey("foo");
     ```
 
 
