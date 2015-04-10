@@ -1,3 +1,7 @@
+# Microsoft discontinued the NokiaX platform, this project is no longer active.
+
+I will try to work on the new billing system the NokiaX platform now uses when I'll have some more free time.
+
 *This project is a billing provider plugin to [android-store](https://github.com/soomla/android-store).*
 
 ## android-store-nokia-store
